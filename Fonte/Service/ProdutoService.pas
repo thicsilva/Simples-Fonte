@@ -14,6 +14,7 @@ type
   class procedure indexServico(DataSet: TFDMemTable; Search: String);
   class procedure indexEstoque(DataSet: TFDMemTable; Search: String;
   CustoTotal,EstoqueTotal: TLabel);
+  class procedure indexApoioInventario(DataSet: TFDMemTable; Search: String);
   class procedure indexInventario(DataSet: TFDMemTable; Search: String);
   class function getById(IdProduto: String): TPrProdutoVO;
   class function save(Produto: TPrProdutoVO): Boolean;
@@ -46,6 +47,34 @@ begin
       Dataset.FieldByName('VALOR_VENDA').AsCurrency:= Produtos.Items[I].ValorVenda;
       Dataset.FieldByName('ESTOQUE').AsCurrency:= Produtos.Items[I].DisponivelEstoque;
       Dataset.FieldByName('VALOR_CUSTO').AsCurrency:= Produtos.Items[I].ValorCusto;
+      Dataset.Post;
+      Produtos.Items[I].Free;
+    end;
+    FreeAndNil(Produtos);
+    Dataset.First;
+  end;
+  Dataset.EnableControls;
+end;
+
+class procedure TProdutoService.indexApoioInventario(DataSet: TFDMemTable;
+  Search: String);
+var
+  Produtos: TList<TPrProdutoVO>;
+  I: Integer;
+begin
+  Produtos:= nil;
+  Dataset.Open;
+  Dataset.DisableControls;
+  Dataset.EmptyDataSet;
+  Produtos:= TProdutoRepository.index(Search);
+  if Assigned(Produtos) then
+  begin
+    for I:= 0 to Pred(Produtos.Count) do
+    begin
+      Dataset.Append;
+      Dataset.FieldByName('CODIGO').AsString:= Produtos.Items[I].Codigo;
+      Dataset.FieldByName('DESCRICAO').AsString:= Produtos.Items[I].Nome;
+      Dataset.FieldByName('QUANTIDADE').AsCurrency:= Produtos.Items[I].DisponivelEstoque;
       Dataset.Post;
       Produtos.Items[I].Free;
     end;

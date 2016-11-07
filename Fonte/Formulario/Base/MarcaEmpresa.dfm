@@ -2,6 +2,8 @@ inherited FMarcaEmpresa: TFMarcaEmpresa
   Caption = 'Marca da Empresa'
   ClientHeight = 435
   ClientWidth = 584
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   ExplicitWidth = 584
   ExplicitHeight = 435
   PixelsPerInch = 96
@@ -50,6 +52,7 @@ inherited FMarcaEmpresa: TFMarcaEmpresa
         994C569E7164FE5E5EC67DDB7E7BCE2333F16B982CD62040A493C5603269FF87
         FE4E74E807C3A15074B936140C3ECE7BE8A7C3417E5BFE02D0DF9E7AB476A3FA
         0000000049454E44AE426082}
+      OnClick = Image3Click
     end
     object Label1: TLabel [1]
       Left = 99
@@ -82,9 +85,9 @@ inherited FMarcaEmpresa: TFMarcaEmpresa
     object Label5: TLabel [5]
       Left = 185
       Top = 186
-      Width = 74
+      Width = 52
       Height = 13
-      Caption = 'JPG, PNG, GIF'
+      Caption = 'JPEG,PNG'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 10289152
       Font.Height = -11
@@ -140,8 +143,6 @@ inherited FMarcaEmpresa: TFMarcaEmpresa
       BevelOuter = bvNone
       Enabled = False
       TabOrder = 1
-      ExplicitTop = 8
-      ExplicitWidth = 808
       object lblTituloForm: TLabel
         Left = 0
         Top = 0
@@ -411,20 +412,27 @@ inherited FMarcaEmpresa: TFMarcaEmpresa
     inherited pnlHeader: TPanel
       Top = 373
       Width = 570
+      ExplicitTop = 373
+      ExplicitWidth = 570
       inherited imgBorderGreenCadastro: TImage
         Left = 286
+        ExplicitLeft = 286
       end
       inherited spbCancelar: TSpeedButton
         Left = 292
+        ExplicitLeft = 292
       end
       inherited imgBorderBlueAlterar: TImage
         Left = 427
+        ExplicitLeft = 427
       end
       inherited spbSalvar: TSpeedButton
         Left = 433
+        ExplicitLeft = 433
       end
       inherited Bevel2: TBevel
         Width = 570
+        ExplicitWidth = 570
       end
     end
     object edtLogo: TLabeledEdit
@@ -433,8 +441,9 @@ inherited FMarcaEmpresa: TFMarcaEmpresa
       Width = 145
       Height = 24
       CharCase = ecUpperCase
-      EditLabel.Width = 7
+      EditLabel.Width = 49
       EditLabel.Height = 15
+      EditLabel.Caption = 'edtLogo'
       EditLabel.Font.Charset = ANSI_CHARSET
       EditLabel.Font.Color = clWindowText
       EditLabel.Font.Height = -12
@@ -458,15 +467,22 @@ inherited FMarcaEmpresa: TFMarcaEmpresa
       BevelKind = bkSoft
       BevelOuter = bvNone
       TabOrder = 4
-      object Image2: TImage
+      object imgLogoEmpresa: TImage
         Left = 0
         Top = 0
         Width = 80
         Height = 80
         Align = alClient
+        Proportional = True
+        Stretch = True
         ExplicitLeft = -4
         ExplicitTop = -4
       end
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActionSalvar: TAction
+      OnExecute = ActionSalvarExecute
     end
   end
 end

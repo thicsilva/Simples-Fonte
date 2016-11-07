@@ -9,7 +9,9 @@ uses
   Data.DB, Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, ProdutoService, PrProdutoVO;
+  FireDAC.Comp.Client, ProdutoService, PrProdutoVO, frxClass, frxDBSet,
+  System.Generics.Collections, PsEmpresaVO, PessoaRepository, PsPessoaVO,
+  DadosEmpresaService, frxGradient;
 
 type
   TFInventarioEstoque = class(TFModeloStore)
@@ -65,6 +67,12 @@ type
     Image7: TImage;
     SpeedButton7: TSpeedButton;
     Image8: TImage;
+    fdmt_Apoio: TFDMemTable;
+    fdmt_ApoioCODIGO: TStringField;
+    fdmt_ApoioDESCRICAO: TStringField;
+    fdmt_ApoioQUANTIDADE: TCurrencyField;
+    frxGradientObject1: TfrxGradientObject;
+    frxReport1: TfrxReport;
     procedure ActionExitExecute(Sender: TObject);
     procedure ActionEditarExecute(Sender: TObject);
     procedure ActionAdicionarMaisExecute(Sender: TObject);
@@ -279,8 +287,32 @@ begin
 end;
 
 procedure TFInventarioEstoque.SpeedButton2Click(Sender: TObject);
+var
+  frxReport: TfrxReport;
+  frxDBDataSet: TfrxDBDataset;
+  ObjPessoa: TPsPessoaVO;
+  ObjEmpresa: TPsEmpresaVO;
 begin
-  //
+  ObjPessoa:= TPessoaRepository.getByIdEmpresa;
+  ObjEmpresa:= TDadosEmpresaService.getByIdPessoa(ObjPessoa.Id);
+
+  fdmt_Apoio.Open;
+  TProdutoService.indexApoioInventario(fdmt_Apoio,'');
+
+  frxDBDataset:= TfrxDBDataset.Create(nil);
+  frxDbDataset.DataSet:= fdmt_Apoio;
+  frxDBDataset.UserName:= 'frxDBDataset';
+  frxDBDataset.Name:= 'frxDBDataset';
+
+  frxReport:= TfrxReport.Create(nil);
+  frxReport.DataSets.Add(frxDBDataset);
+  frxReport.LoadFromFile('..\relatorios\ApoioInventarioEstoque.fr3');
+  FrxReport.Variables['EMPRESA'] := QuotedStr(Trim(ObjEmpresa.NomeFantasia));
+  FrxReport.Variables['LOGO'] := QuotedStr(Trim(ObjEmpresa.Logo));
+  frxReport.ShowReport;
+
+  FreeAndNil(ObjPessoa);
+  FreeAndNil(ObjEmpresa);
 end;
 
 procedure TFInventarioEstoque.SpeedButton3Click(Sender: TObject);

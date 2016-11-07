@@ -133,7 +133,10 @@ uses
   CadastroEmpresa in 'Formulario\Base\CadastroEmpresa.pas' {FCadastroEmpresa},
   ThreadEnviarVendaEmail in 'Framework\ThreadEnviarVendaEmail.pas',
   ThreadEnviarSimplesEmail in 'Framework\ThreadEnviarSimplesEmail.pas',
-  NFEStore in 'Formulario\Financeiro\NFEStore.pas' {FNFEStore};
+  NFEStore in 'Formulario\Financeiro\NFEStore.pas' {FNFEStore},
+  PsEpNfeVO in 'Vo\PsEpNfeVO.pas',
+  ConfigNFERepository in 'Repository\ConfigNFERepository.pas',
+  ConfigNFEService in 'Service\ConfigNFEService.pas';
 
 {$R *.res}
 

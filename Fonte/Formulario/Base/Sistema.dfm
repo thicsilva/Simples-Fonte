@@ -1,5 +1,7 @@
 inherited FSistema: TFSistema
   Caption = 'Configura'#231#245'es do Sistema'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlMain: TPanel
@@ -17,23 +19,19 @@ inherited FSistema: TFSistema
       Font.Style = []
       ParentFont = False
       TabOrder = 1
-      ExplicitWidth = 812
-      ExplicitHeight = 449
       object tbNFE: TTabSheet
         Caption = 'Configurar NFE'
-        ExplicitTop = 24
-        ExplicitWidth = 804
-        ExplicitHeight = 421
         object rgpFormaEmissao: TRadioGroup
           Left = 0
           Top = 0
           Width = 137
           Height = 145
           Caption = 'Forma de Emiss'#227'o:'
+          ItemIndex = 0
           Items.Strings = (
-            'Normal'
+            'NORMAL'
             'DPEC'
-            'Conting'#234'ncia'
+            'CONTINGENCIA'
             'SCAN'
             'FSDA')
           TabOrder = 0
@@ -236,6 +234,7 @@ inherited FSistema: TFSistema
             Font.Name = 'Courier New'
             Font.Style = []
             ParentFont = False
+            PasswordChar = '*'
             TabOrder = 1
           end
           object edtNumeroSerie: TLabeledEdit
@@ -269,7 +268,7 @@ inherited FSistema: TFSistema
           Height = 273
           Caption = 'WebService:'
           TabOrder = 3
-          object LabeledEdit2: TLabeledEdit
+          object edtUF: TLabeledEdit
             Left = 24
             Top = 44
             Width = 35
@@ -299,9 +298,10 @@ inherited FSistema: TFSistema
             Height = 61
             Caption = 'Ambiente de Destino:'
             Columns = 2
+            ItemIndex = 0
             Items.Strings = (
-              'Produ'#231#227'o'
-              'Homologa'#231#227'o')
+              'PRODUCAO'
+              'HOMOLOGACAO')
             TabOrder = 1
           end
           object gpbConexao: TGroupBox
@@ -401,6 +401,7 @@ inherited FSistema: TFSistema
               Font.Name = 'Courier New'
               Font.Style = []
               ParentFont = False
+              PasswordChar = '*'
               TabOrder = 3
             end
           end
@@ -411,6 +412,9 @@ inherited FSistema: TFSistema
   inherited ActionList: TActionList
     Left = 688
     Top = 384
+    inherited ActionSalvar: TAction
+      OnExecute = ActionSalvarExecute
+    end
   end
   object OpenDialog: TOpenDialog
     Left = 688

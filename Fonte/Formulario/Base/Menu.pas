@@ -610,11 +610,12 @@ begin
       if ObjEmpresa.Termino < now  then
         Result:= 3;
     end;
+
+    FreeAndNil(ObjEmpresa);
+    FreeAndNil(ObjJuridica);
   end;
 
   FreeAndNil(ObjPessoa);
-  FreeAndNil(ObjEmpresa);
-  FreeAndNil(ObjJuridica);
 end;
 
 initialization

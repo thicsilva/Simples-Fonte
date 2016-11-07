@@ -2,6 +2,7 @@ inherited FNFEStore: TFNFEStore
   Caption = 'Gerador de NFE'
   ClientHeight = 562
   ClientWidth = 919
+  OnShow = FormShow
   ExplicitWidth = 919
   ExplicitHeight = 562
   PixelsPerInch = 96
@@ -14,6 +15,8 @@ inherited FNFEStore: TFNFEStore
     inherited pnlHeader: TPanel
       Top = 494
       Width = 898
+      ExplicitTop = 494
+      ExplicitWidth = 898
       inherited imgBorderGreenCadastro: TImage
         Left = 618
         ExplicitLeft = 618
@@ -32,6 +35,7 @@ inherited FNFEStore: TFNFEStore
       end
       inherited Bevel2: TBevel
         Width = 898
+        ExplicitWidth = 898
       end
       object Image1: TImage
         Left = 6
@@ -537,7 +541,10 @@ inherited FNFEStore: TFNFEStore
       TabOrder = 1
       object tbStatus: TTabSheet
         Caption = 'Status NFE'
-        ExplicitHeight = 165
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object mmDados: TMemo
           Left = 458
           Top = 3
@@ -561,12 +568,10 @@ inherited FNFEStore: TFNFEStore
             Height = 172
             Align = alClient
             TabOrder = 0
-            ExplicitLeft = 13
-            ExplicitTop = -4
             ExplicitWidth = 434
             ExplicitHeight = 176
             ControlData = {
-              4C000000DB2C0000311200000000000000000000000000000000000000000000
+              4C000000332E0000C71100000000000000000000000000000000000000000000
               000000004C000000000000000000000001000000E0D057007335CF11AE690800
               2B2E126208000000000000004C0000000114020000000000C000000000000046
               8000000000000000000000000000000000000000000000000000000000000000

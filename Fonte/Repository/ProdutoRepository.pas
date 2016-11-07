@@ -26,8 +26,14 @@ class function TProdutoRepository.index(Search: String): TList<TPrProdutoVO>;
 var
   Filtro: String;
 begin
-  Filtro:= ' NOME LIKE ' + QuotedStr(Search+'%') +
-           ' AND TIPO_CADASTRO = ''PRODUTO''';
+  if Search <> '' then
+  begin
+    Filtro:= ' NOME LIKE ' + QuotedStr(Search+'%') +
+             ' AND TIPO_CADASTRO = ''PRODUTO''';
+  end
+  else
+    Filtro:= ' ID IS NOT NULL AND TIPO_CADASTRO = ''PRODUTO''';
+
   Result:= Consultar<TPrProdutoVO>(False,Filtro);
 end;
 

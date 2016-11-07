@@ -1,5 +1,5 @@
 DriverName=Firebird
-Database=127.0.0.1:C:\Simples\Bin\SIMPLES.FDB
+Database=127.0.0.1:C:\Simples-Fonte\Bin\SIMPLES.FDB
 RoleName=RoleName
 User_Name=sysdba
 Password=masterkey
