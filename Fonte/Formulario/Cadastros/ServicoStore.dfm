@@ -1,0 +1,296 @@
+inherited FServicoStore: TFServicoStore
+  Caption = 'Cadastro de Servi'#231'os'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited pnlMain: TPanel
+    inherited pnlHeader: TPanel
+      TabOrder = 3
+    end
+    object pnlTitle: TPanel
+      Left = 0
+      Top = 0
+      Width = 808
+      Height = 49
+      Align = alTop
+      BevelOuter = bvNone
+      Enabled = False
+      TabOrder = 0
+      object lblTituloForm: TLabel
+        Left = 299
+        Top = 13
+        Width = 275
+        Height = 21
+        Caption = 'Cadastro de novo Servi'#231'o!'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 6316128
+        Font.Height = -19
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Bevel1: TBevel
+        Left = 0
+        Top = 47
+        Width = 808
+        Height = 2
+        Align = alBottom
+        Shape = bsBottomLine
+        ExplicitTop = 71
+        ExplicitWidth = 879
+      end
+    end
+    object pnlNomeServico: TPanel
+      Left = 0
+      Top = 49
+      Width = 808
+      Height = 74
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 1
+      TabStop = True
+      object Bevel5: TBevel
+        Left = 47
+        Top = 6
+        Width = 2
+        Height = 100
+        Shape = bsRightLine
+      end
+      object Image2: TImage
+        Left = 6
+        Top = 6
+        Width = 32
+        Height = 32
+        Picture.Data = {
+          0954506E67496D61676589504E470D0A1A0A0000000D49484452000000200000
+          00200806000000737A7AF4000002744944415478DAED96514EC24010865B02BC
+          8A27104E209E807A02E104D604086FEA09A837D03702242E27104F209E403C81
+          F504E22B04F09F66DB9465BB9D06883EB849B34DBB3BFBCDBF33B36B5BBFDC6C
+          F543ABD572D1D5F094F1F8EBF57A341C0E270707705DB75428145E6CDBAEAA83
+          00210683C1D54101DAEDF614DD69D240403C00E2E62000243B3C7F4C1B9CCBE5
+          2ABD5ECFE71886CD2A6C5EA8DFFBFDFEDD1600BC17E82E19766F61E09E03009B
+          1EBAAEFA7DB55A9DC7632A546002DA1AC3EE1D00BCBD037015401C5C210EC42E
+          00D2CE0C768E238066B3E9607F5F526C7ECFE7F3B21062B623C0889C85927604
+          C05481BDFFE410B6B48BC7D1784FDBEDA0BF592C16A38D428458B8C7CF6BD573
+          3C1E7771A633815D40385B95B0D3E994112875BC9630C007E53883EC34EF346D
+          9C8C81077A8F0048B67C3EEFEBF29CA096CBE50960DE4D30A420BAAAC5680070
+          02004CF221FB89FCEE43EA4A7C2095E862B1F8A5782000731B879141B7E62C1E
+          57C2C6C48D4988F4E3B8E1A40C51CF07D8A1394719013EB700D44261CA67B406
+          141B4BF9497A4F577E13167F0EC6AB009652ED4C559224C4565454C530DEB815
+          50EE357CDF0280D1D7304098D28E01DC90638565483FB28DC7DB28C51A80A84C
+          CA94FC60C849B15083E7AE6E517422299D755B101DBB32AF9FD2000C6D04755C
+          D3002D4078E82454465653B7322B4070FBC9704CABED1DE9EC702A68124040AF
+          FB175FC4D297DD6F6C61957B73B2931601C419BC7F4B9A48718200A57B643C43
+          820306F053AE542680675351A1F35CDEFB262144960B0B076006E3251300F512
+          82B2651A56C5BD00A4B51060D7F60FF027000402AE9C711E9D17F5BD00ECC3C8
+          2EED07A507AFCB16697A170000000049454E44AE426082}
+      end
+      object imgSearchCategoria: TImage
+        Left = 857
+        Top = 66
+        Width = 24
+        Height = 24
+        Cursor = crHandPoint
+        Picture.Data = {
+          0954506E67496D61676589504E470D0A1A0A0000000D49484452000000180000
+          00180806000000E0773DF8000003294944415478DA9D564B4C135114BD43FF14
+          DA426B29AD1AFE34455268699405461203512441C0051B16C6953B7644F14334
+          06131376AE8C4437E806F09F1A135D98A0D1FE829616A222B585C2B4B440DB69
+          3B50FBAA9D40FFE56C26999977CE9973DFBB7730C80367AFBC6A42D7D777BA8C
+          B9AEC1323D3C37FCE21493CD1EC220A266D0992C3A831EBB4F86490893A16004
+          305D8820C65F8E757FC84BA067F84D05C62C9816F07812A94C2A1108F829177B
+          3C5E70D81DAB1EEFA63312DEED99193BB3945500B9E67038537575B525E98853
+          092D2C2CBA0381405FE2D76089E4851CF6B366958A47A7D3F2290F90E40EE80D
+          066FC01FE8D92B4209A058181C865EA56A2EC9977C9F88DEE00E07C2EA785C94
+          C0F96B5AA3422157E61A4B1C04118C169C84E2222E1597D96C314DDFEA6CA204
+          50348744C2278A0645593EC40EBB0DEC0E2768342DC066B3A867E6EFF3ABEB38
+          3E80A28A09F4DDD43E97D7CBBB73718F1C6E7B71A0ED06A1A54E041F2D5EA8AC
+          AE4D7A67DE629D981AEDB81813E8BDA1B5B79E382ECD46EC5CB141A5980BDDAD
+          47A0B14A0843F7674128ADDEE73E8ED94F9F1D53A39DB298C0C0EDF7B84ADD2C
+          4C45BCEA5C039F671DAA258530D8510FE2124EECFEDC4F173C7CBB04B28A9A94
+          86F43A836B72A45D84A1E35FCAE3BF532A8F091389DD6B2BD11884D07FB28A22
+          8E6364E22BD08AA554711361327D73B937BDA7930410F1CA1F1B1C1517C250BF
+          328918616D230057270C50AF68481B2925902AA2AD6D1FF83637C0ED7281A088
+          016D8DE5D0D17218B8EC7FBDE8EEA411B6B052C8B429A888B215191D1EBBDD01
+          ED0A2EF4B655C6DC5F7F64801A797AF74945CEB64DD19E77397EC0F8E556B8F7
+          D4047898072251695AF2A46D9ACB4133CF9960EC9206861F7C0145A332A37B94
+          BFC7B3D14F1D34846CADC2B6FC0B384000C91282A44C9CD17D52AB40C8D6EC50
+          E117AD1650A9D569C951BD743A3D4E12A426A9D9C5A3CAD4AE71DC9D367B446E
+          301ABD7E9F3F75BBDE2B72908163B52EE004415CC83870F6C685310A66F87C7E
+          994C569E7164FE5E5EC67DDB7E7BCE2333F16B982CD62040A493C5603269FF87
+          FE4E74E807C3A15074B936140C3ECE7BE8A7C3417E5BFE02D0DF9E7AB476A3FA
+          0000000049454E44AE426082}
+      end
+      object Label11: TLabel
+        Left = 59
+        Top = 53
+        Width = 168
+        Height = 16
+        Cursor = crHandPoint
+        Caption = #9660' Exibir mais campos '
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 16031488
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        StyleElements = []
+        OnClick = Label11Click
+      end
+      object Label12: TLabel
+        Left = 228
+        Top = 53
+        Width = 80
+        Height = 16
+        Caption = '(Opcional)'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 9474192
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+      end
+      object edtNomeServico: TLabeledEdit
+        Left = 59
+        Top = 20
+        Width = 260
+        Height = 24
+        CharCase = ecUpperCase
+        EditLabel.Width = 126
+        EditLabel.Height = 15
+        EditLabel.Caption = 'Nome do Servi'#231'o: *'
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = clWindowText
+        EditLabel.Font.Height = -12
+        EditLabel.Font.Name = 'Courier New'
+        EditLabel.Font.Style = []
+        EditLabel.ParentFont = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnKeyDown = edtNomeServicoKeyDown
+      end
+    end
+    object pnlServicoDados: TPanel
+      Left = 0
+      Top = 123
+      Width = 808
+      Height = 1
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 2
+      TabStop = True
+      object Bevel3: TBevel
+        Left = 47
+        Top = -1
+        Width = 2
+        Height = 50
+        Shape = bsRightLine
+      end
+      object Image3: TImage
+        Left = 857
+        Top = 66
+        Width = 24
+        Height = 24
+        Cursor = crHandPoint
+        Picture.Data = {
+          0954506E67496D61676589504E470D0A1A0A0000000D49484452000000180000
+          00180806000000E0773DF8000003294944415478DA9D564B4C135114BD43FF14
+          DA426B29AD1AFE34455268699405461203512441C0051B16C6953B7644F14334
+          06131376AE8C4437E806F09F1A135D98A0D1FE829616A222B585C2B4B440DB69
+          3B50FBAA9D40FFE56C26999977CE9973DFBB7730C80367AFBC6A42D7D777BA8C
+          B9AEC1323D3C37FCE21493CD1EC220A266D0992C3A831EBB4F86490893A16004
+          305D8820C65F8E757FC84BA067F84D05C62C9816F07812A94C2A1108F829177B
+          3C5E70D81DAB1EEFA63312DEED99193BB3945500B9E67038537575B525E98853
+          092D2C2CBA0381405FE2D76089E4851CF6B366958A47A7D3F2290F90E40EE80D
+          066FC01FE8D92B4209A058181C865EA56A2EC9977C9F88DEE00E07C2EA785C94
+          C0F96B5AA3422157E61A4B1C04118C169C84E2222E1597D96C314DDFEA6CA204
+          50348744C2278A0645593EC40EBB0DEC0E2768342DC066B3A867E6EFF3ABEB38
+          3E80A28A09F4DDD43E97D7CBBB73718F1C6E7B71A0ED06A1A54E041F2D5EA8AC
+          AE4D7A67DE629D981AEDB81813E8BDA1B5B79E382ECD46EC5CB141A5980BDDAD
+          47A0B14A0843F7674128ADDEE73E8ED94F9F1D53A39DB298C0C0EDF7B84ADD2C
+          4C45BCEA5C039F671DAA258530D8510FE2124EECFEDC4F173C7CBB04B28A9A94
+          86F43A836B72A45D84A1E35FCAE3BF532A8F091389DD6B2BD11884D07FB28A22
+          8E6364E22BD08AA554711361327D73B937BDA7930410F1CA1F1B1C1517C250BF
+          328918616D230057270C50AF68481B2925902AA2AD6D1FF83637C0ED7281A088
+          016D8DE5D0D17218B8EC7FBDE8EEA411B6B052C8B429A888B215191D1EBBDD01
+          ED0A2EF4B655C6DC5F7F64801A797AF74945CEB64DD19E77397EC0F8E556B8F7
+          D4047898072251695AF2A46D9ACB4133CF9960EC9206861F7C0145A332A37B94
+          BFC7B3D14F1D34846CADC2B6FC0B384000C91282A44C9CD17D52AB40C8D6EC50
+          E117AD1650A9D569C951BD743A3D4E12A426A9D9C5A3CAD4AE71DC9D367B446E
+          301ABD7E9F3F75BBDE2B72908163B52EE004415CC83870F6C685310A66F87C7E
+          994C569E7164FE5E5EC67DDB7E7BCE2333F16B982CD62040A493C5603269FF87
+          FE4E74E807C3A15074B936140C3ECE7BE8A7C3417E5BFE02D0DF9E7AB476A3FA
+          0000000049454E44AE426082}
+      end
+      object edtValorVenda: TLabeledEdit
+        Left = 59
+        Top = 20
+        Width = 200
+        Height = 24
+        BiDiMode = bdLeftToRight
+        CharCase = ecUpperCase
+        EditLabel.Width = 105
+        EditLabel.Height = 15
+        EditLabel.BiDiMode = bdLeftToRight
+        EditLabel.Caption = 'Valor de Venda:'
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = clWindowText
+        EditLabel.Font.Height = -12
+        EditLabel.Font.Name = 'Courier New'
+        EditLabel.Font.Style = []
+        EditLabel.ParentBiDiMode = False
+        EditLabel.ParentFont = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentBiDiMode = False
+        ParentFont = False
+        TabOrder = 0
+        OnEnter = ConvertCurrencyString
+        OnExit = StringFormatCurrency2
+        OnKeyPress = SomenteNumerosVirgulaPontoKeyPress
+      end
+      object edtValorCusto: TLabeledEdit
+        Left = 265
+        Top = 20
+        Width = 200
+        Height = 24
+        CharCase = ecUpperCase
+        EditLabel.Width = 119
+        EditLabel.Height = 15
+        EditLabel.Caption = 'Custo do servi'#231'o:'
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = clWindowText
+        EditLabel.Font.Height = -12
+        EditLabel.Font.Name = 'Courier New'
+        EditLabel.Font.Style = []
+        EditLabel.ParentFont = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnEnter = ConvertCurrencyString
+        OnExit = StringFormatCurrency2
+        OnKeyPress = SomenteNumerosVirgulaPontoKeyPress
+      end
+    end
+  end
+  inherited ActionList: TActionList
+    Left = 480
+    Top = 304
+    inherited ActionSalvar: TAction
+      OnExecute = ActionSalvarExecute
+    end
+  end
+end
