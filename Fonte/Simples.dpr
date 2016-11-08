@@ -136,7 +136,8 @@ uses
   NFEStore in 'Formulario\Financeiro\NFEStore.pas' {FNFEStore},
   PsEpNfeVO in 'Vo\PsEpNfeVO.pas',
   ConfigNFERepository in 'Repository\ConfigNFERepository.pas',
-  ConfigNFEService in 'Service\ConfigNFEService.pas';
+  ConfigNFEService in 'Service\ConfigNFEService.pas',
+  ContaPagar in 'Formulario\Financeiro\ContaPagar.pas' {FContaPagar};
 
 {$R *.res}
 

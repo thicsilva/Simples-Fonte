@@ -95,7 +95,7 @@ begin
     FreeAndNil(FPagamento);
   end;
   fdmt_Modelo.Open;
-  TCrediarioService.indexContaPagar(fdmt_Modelo,lblTotalEmAtraso,
+  TCrediarioService.indexParcelaPagar(fdmt_Modelo,lblTotalEmAtraso,
   lblValorTotalEmAtraso,lblTotalAPagar,lblValorTotalAPagar,lblTotalPago,lblValorTotalPago,
   lblTotal,lblValorTotal,'');
 end;
@@ -104,7 +104,7 @@ procedure TFParcelaPagar.edtPesquisaChange(Sender: TObject);
 begin
   if Trim(edtPesquisa.Text) <> EmptyStr then
   begin
-    TCrediarioService.indexContaPagar(fdmt_Modelo,lblTotalEmAtraso,
+    TCrediarioService.indexParcelaPagar(fdmt_Modelo,lblTotalEmAtraso,
     lblValorTotalEmAtraso,lblTotalAPagar,lblValorTotalAPagar,lblTotalPago,lblValorTotalPago,
     lblTotal,lblValorTotal,Trim(edtPesquisa.Text));
   end;
@@ -121,7 +121,7 @@ begin
   pnlTotal.Width:= Round(Tamanho);
 
   fdmt_Modelo.Open;
-  TCrediarioService.indexContaPagar(fdmt_Modelo,lblTotalEmAtraso,
+  TCrediarioService.indexParcelaPagar(fdmt_Modelo,lblTotalEmAtraso,
   lblValorTotalEmAtraso,lblTotalAPagar,lblValorTotalAPagar,lblTotalPago,lblValorTotalPago,
   lblTotal,lblValorTotal,'');
 end;

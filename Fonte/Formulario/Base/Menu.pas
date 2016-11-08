@@ -312,6 +312,7 @@ type
     procedure Dadosdaempresa1Click(Sender: TObject);
     procedure Marcadaempresa1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ContasaPagar1Click(Sender: TObject);
   {$ENDREGION}
 
   private
@@ -335,7 +336,7 @@ implementation
 uses Modelo, Cliente, OS, CategoriaProduto, CentroCusto, Produto, Servico,
   Usuario, Login, Estoque, Fornecedor, Transportadora, Compra, PlanoConta,
   ParcelaPagar, Banco, Venda, Sistema, DadosEmpresa, MarcaEmpresa,
-  CadastroEmpresa;
+  CadastroEmpresa, ContaPagar;
 
 procedure TFMenu.LoadStyles;
 var
@@ -507,6 +508,11 @@ begin
   OpenFormMain(FCliente,TFCliente);
 end;
 
+procedure TFMenu.ContasaPagar1Click(Sender: TObject);
+begin
+  OpenFormMain(FContaPagar,TFContaPagar);
+end;
+
 procedure TFMenu.Dadosdaempresa1Click(Sender: TObject);
 begin
   OpenForm(FDadosEmpresa,TFDadosEmpresa);
@@ -601,7 +607,7 @@ begin
 
     Liberacao:= MD5String('CNPJ: ' + Trim(ObjJuridica.Cnpj) + ', Senha: if1+1==2, '+
     'Inicio: ' + DateToStr(ObjEmpresa.Inicio) +', Termino: ' + DateToStr(ObjEmpresa.Termino));
-    varBaseTempoLiberacao:= IntToStr(DaysBetween(ObjEmpresa.Inicio,ObjEmpresa.Termino));
+    varBaseTempoLiberacao:= IntToStr(DaysBetween(now,ObjEmpresa.Termino));
 
     if UpperCase(Liberacao) <> Trim(ObjEmpresa.Serial) then
       Result:= 3

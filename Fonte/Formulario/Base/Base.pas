@@ -49,6 +49,7 @@ type
     class var varBaseIdPagamento: String;
     class var varBaseIdBanco: String;
     class var varBaseIdConfBoleto: String;
+    class var varBaseIdContaPagar: String;
 
     class var varBaseIdUsuarioLogado: String;
     class var varBaseNomeUsuarioLogado: String;
