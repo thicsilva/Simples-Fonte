@@ -3,6 +3,7 @@ inherited FPagamento: TFPagamento
   ClientHeight = 329
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   ExplicitHeight = 329
   PixelsPerInch = 96
   TextHeight = 13

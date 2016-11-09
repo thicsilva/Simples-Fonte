@@ -313,6 +313,7 @@ type
     procedure Marcadaempresa1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ContasaPagar1Click(Sender: TObject);
+    procedure ContasaReceber1Click(Sender: TObject);
   {$ENDREGION}
 
   private
@@ -336,7 +337,7 @@ implementation
 uses Modelo, Cliente, OS, CategoriaProduto, CentroCusto, Produto, Servico,
   Usuario, Login, Estoque, Fornecedor, Transportadora, Compra, PlanoConta,
   ParcelaPagar, Banco, Venda, Sistema, DadosEmpresa, MarcaEmpresa,
-  CadastroEmpresa, ContaPagar;
+  CadastroEmpresa, ContaPagar, ContaReceber;
 
 procedure TFMenu.LoadStyles;
 var
@@ -511,6 +512,11 @@ end;
 procedure TFMenu.ContasaPagar1Click(Sender: TObject);
 begin
   OpenFormMain(FContaPagar,TFContaPagar);
+end;
+
+procedure TFMenu.ContasaReceber1Click(Sender: TObject);
+begin
+  OpenFormMain(FContaReceber,TFContaReceber);
 end;
 
 procedure TFMenu.Dadosdaempresa1Click(Sender: TObject);

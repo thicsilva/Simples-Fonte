@@ -9,7 +9,9 @@ uses
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, System.Actions, Vcl.ActnList,
   System.ImageList, Vcl.ImgList, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.WinXCtrls, Vcl.ExtCtrls,
-  Vcl.Buttons, Vcl.Imaging.pngimage, CrediarioService, Vcl.ComCtrls, Biblioteca;
+  Vcl.Buttons, Vcl.Imaging.pngimage, CrediarioService, Vcl.ComCtrls, Biblioteca,
+  frxClass, frxDBSet, PsPessoaVO, PsEmpresaVO, PessoaRepository,
+  DadosEmpresaService;
 
 type
   TFContaPagar = class(TFModelo)
@@ -57,6 +59,10 @@ type
     Label13: TLabel;
     Label14: TLabel;
     fdmt_ModeloLANCAMENTO: TStringField;
+    SpeedButton1: TSpeedButton;
+    Image2: TImage;
+    ActionImprimir: TAction;
+    fdmt_ModeloID_COMPRA: TStringField;
     procedure FormCreate(Sender: TObject);
     procedure edtPesquisaChange(Sender: TObject);
     procedure ActionExcluirExecute(Sender: TObject);
@@ -68,6 +74,7 @@ type
     procedure imgMark0Click(Sender: TObject);
     procedure imgMark1Click(Sender: TObject);
     procedure imgSearchClienteClick(Sender: TObject);
+    procedure ActionImprimirExecute(Sender: TObject);
   private
     { Private declarations }
   public
@@ -122,32 +129,76 @@ procedure TFContaPagar.ActionExcluirExecute(Sender: TObject);
 begin
   if not fdmt_Modelo.IsEmpty then
   begin
-    try
-      FMensagem:= TFMensagem.Create(nil);
-      FMensagem.Height:= FMenu.Height;
-      FMensagem.Width:= FMenu.Width;
-      FMensagem.tipo:= 1;
-      FMensagem.ImagemInfo:= 0;
-      FMensagem.Label2.Caption:= 'Deseja realmente excluir todos os registros selecionados?';
-      FMensagem.ShowModal;
-      if FMensagem.Tag = 1 then
-      begin
-        fdmt_Modelo.First;
-        while not fdmt_Modelo.Eof do
+    if (fdmt_ModeloID_COMPRA.AsString) = '' then
+    begin
+      try
+        FMensagem:= TFMensagem.Create(nil);
+        FMensagem.Height:= FMenu.Height;
+        FMensagem.Width:= FMenu.Width;
+        FMensagem.tipo:= 1;
+        FMensagem.ImagemInfo:= 0;
+        FMensagem.Label2.Caption:= 'Deseja realmente excluir todos os registros selecionados?';
+        FMensagem.ShowModal;
+        if FMensagem.Tag = 1 then
         begin
-          if fdmt_ModeloMARK.AsInteger = 1 then
+          fdmt_Modelo.First;
+          while not fdmt_Modelo.Eof do
           begin
-            if TCrediarioService.destroyer(fdmt_ModeloID.AsString) then
-              fdmt_Modelo.Delete;
-          end;
+            if fdmt_ModeloMARK.AsInteger = 1 then
+            begin
+              if TCrediarioService.destroyer(fdmt_ModeloID.AsString) then
+                fdmt_Modelo.Delete;
+            end;
 
-          fdmt_Modelo.Next;
+            fdmt_Modelo.Next;
+          end;
         end;
+      finally
+        FreeAndNil(FMensagem);
+        fdmt_Modelo.First;
+        TCrediarioService.indexContaPagar(fdmt_Modelo,lblValorPagas,lblValorApagar,
+        lblValorVencidas,lblValorPagamentos,lblNLancamentos,'','0',now,now);
       end;
-    finally
-      FreeAndNil(FMensagem);
-      fdmt_Modelo.First;
-    end;
+    end
+    else
+      Mensagem('Não é possivel excluir está parcela, pois a mesma está ligada a uma Compra!',0,1);
+  end;
+end;
+
+procedure TFContaPagar.ActionImprimirExecute(Sender: TObject);
+var
+  frxReport: TfrxReport;
+  frxDBDataSet: TfrxDBDataset;
+  ObjPessoa: TPsPessoaVO;
+  ObjEmpresa: TPsEmpresaVO;
+begin
+  try
+    ObjPessoa:= TPessoaRepository.getByIdEmpresa;
+    ObjEmpresa:= TDadosEmpresaService.getByIdPessoa(ObjPessoa.Id);
+
+    frxDBDataset:= TfrxDBDataset.Create(nil);
+    frxDbDataset.DataSet:= fdmt_Modelo;
+    frxDBDataset.UserName:= 'frxDBDataset';
+    frxDBDataset.Name:= 'frxDBDataset';
+
+    frxReport:= TfrxReport.Create(nil);
+    frxReport.DataSets.Add(frxDBDataset);
+    frxReport.LoadFromFile('..\relatorios\ContasApagar.fr3');
+    FrxReport.Variables['EMPRESA'] := QuotedStr(Trim(ObjEmpresa.NomeFantasia));
+    FrxReport.Variables['LOGO'] := QuotedStr(Trim(ObjEmpresa.Logo));
+    FrxReport.Variables['USUARIO'] := QuotedStr(Trim(varBaseNomeUsuarioLogado));
+    FrxReport.Variables['PAGAS'] := QuotedStr(Trim(lblValorPagas.Caption));
+    FrxReport.Variables['APAGAR'] := QuotedStr(Trim(lblValorApagar.Caption));
+    FrxReport.Variables['VENCIDAS'] := QuotedStr(Trim(lblValorVencidas.Caption));
+    FrxReport.Variables['TOTAL_PAGAMENTO'] := QuotedStr(Trim(lblValorPagamentos.Caption));
+    FrxReport.Variables['N_LANCAMENTOS'] := QuotedStr(Trim(lblNLancamentos.Caption));
+    FrxReport.Variables['N_LANCAMENTOS_SELECIONADOS'] := QuotedStr(Trim(lblNLancamentosSelecionados.Caption));
+    FrxReport.Variables['T_LANCAMENTO_SELECIONADO'] := QuotedStr(Trim(lblTotalLancamentosSelecionados.Caption));
+    FrxReport.Variables['PERIODO'] := QuotedStr(Trim(lblTotalPeriodo.Caption));
+    frxReport.ShowReport;
+  finally
+    FreeAndNil(ObjPessoa);
+    FreeAndNil(ObjEmpresa);
   end;
 end;
 
@@ -159,6 +210,10 @@ end;
 
 procedure TFContaPagar.FormCreate(Sender: TObject);
 begin
+  edtPeriodoInicio.Date:= Now - 30;
+  edtPeriodoFinal.Date:= Now;
+  lblTotalPeriodo.Caption:= 'Total do período ('+FormatDateTime('dd mmm yyyy',edtPeriodoInicio.Date)+' - ' +
+  FormatDateTime('dd mmm yyyy',edtPeriodoFinal.Date) + ')';
   fdmt_Modelo.Open;
   TCrediarioService.indexContaPagar(fdmt_Modelo,lblValorPagas,lblValorApagar,
   lblValorVencidas,lblValorPagamentos,lblNLancamentos,'','0',now,now);
@@ -269,6 +324,8 @@ end;
 
 procedure TFContaPagar.imgSearchClienteClick(Sender: TObject);
 begin
+  lblTotalPeriodo.Caption:= 'Total do período ('+FormatDateTime('dd mmm yyyy',edtPeriodoInicio.Date)+' - ' +
+  FormatDateTime('dd mmm yyyy',edtPeriodoFinal.Date)+ ')';
   TCrediarioService.indexContaPagar(fdmt_Modelo,lblValorPagas,lblValorApagar,
   lblValorVencidas,lblValorPagamentos,lblNLancamentos,'','1',edtPeriodoInicio.Date,edtPeriodoFinal.Date);
 end;

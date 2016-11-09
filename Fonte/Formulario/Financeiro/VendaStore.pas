@@ -382,6 +382,7 @@ end;
 procedure TFVendaStore.AdicionaParcelas;
 var
   Parcelas,I: Integer;
+  Sobras: Currency;
 begin
   if cbxVendaCondicaoParcela.ItemIndex >= 2 then
   begin
@@ -403,7 +404,14 @@ begin
       fdmt_Parcelas.FieldByName('PARCELA').AsString:= IntToStr(I+1) +'/'+IntToStr(Parcelas);
       fdmt_Parcelas.FieldByName('VENCIMENTO').AsDateTime:= IncMonth(now,I);
       fdmt_Parcelas.FieldByName('OBS').AsString:= '';
-      fdmt_Parcelas.FieldByName('VALOR').AsCurrency:= ConvertCurrency(lblTotalLiquido.Caption) / Parcelas;
+      if I+1 = Parcelas then
+      begin
+        Sobras:= (ConvertCurrency(lblTotalLiquido.Caption) -
+        ConvertCurrency(FloatToStrF((ConvertCurrency(lblTotalLiquido.Caption) / Parcelas),ffNumber,12,2)) * Parcelas);
+        fdmt_Parcelas.FieldByName('VALOR').AsCurrency:= Sobras + (ConvertCurrency(lblTotalLiquido.Caption) / Parcelas);
+      end
+      else
+        fdmt_Parcelas.FieldByName('VALOR').AsCurrency:= ConvertCurrency(lblTotalLiquido.Caption) / Parcelas;
       fdmt_Parcelas.Post;
     end;
 

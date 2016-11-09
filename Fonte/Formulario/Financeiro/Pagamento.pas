@@ -57,6 +57,7 @@ type
     procedure edtContaBancariaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure edtValorChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     ObjCrediario: TFnCrediarioVO;
@@ -219,7 +220,6 @@ begin
   if not Assigned(ObjCrediario) then
   begin
     ObjCrediario:= TFnCrediarioVO.Create;
-    lblTituloForm.Caption:= 'Novo Pagamento!';
   end
   else
   begin
@@ -232,6 +232,14 @@ end;
 procedure TFPagamento.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(ObjCrediario);
+end;
+
+procedure TFPagamento.FormShow(Sender: TObject);
+begin
+  if Trim(lblTituloForm.Hint) = 'CONTA A RECEBER' then
+    lblTituloForm.Caption:= 'Novo Recebimento!'
+  else
+    lblTituloForm.Caption:= 'Novo Pagamento!';
 end;
 
 procedure TFPagamento.imgSearchCategoriaClick(Sender: TObject);

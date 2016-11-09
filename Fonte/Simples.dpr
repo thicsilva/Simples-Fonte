@@ -137,7 +137,8 @@ uses
   PsEpNfeVO in 'Vo\PsEpNfeVO.pas',
   ConfigNFERepository in 'Repository\ConfigNFERepository.pas',
   ConfigNFEService in 'Service\ConfigNFEService.pas',
-  ContaPagar in 'Formulario\Financeiro\ContaPagar.pas' {FContaPagar};
+  ContaPagar in 'Formulario\Financeiro\ContaPagar.pas' {FContaPagar},
+  ContaReceber in 'Formulario\Financeiro\ContaReceber.pas' {FContaReceber};
 
 {$R *.res}
 

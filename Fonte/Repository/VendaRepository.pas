@@ -23,7 +23,11 @@ class function TVendaRepository.index(Search: String): TList<TVdVendaVO>;
 var
   Filtro: String;
 begin
-  Filtro:= ' OBS LIKE ' + QuotedStr(Search+'%');
+  if Search <> '' then
+    Filtro:= ' OBS LIKE ' + QuotedStr(Search+'%') + ' ORDER BY DATA_VENDA_ORCAMENTO'
+  else
+    Filtro:= ' ID IS NOT NULL  ORDER BY DATA_VENDA_ORCAMENTO';
+
   Result:= Consultar<TVdVendaVO>(False,Filtro);
 end;
 

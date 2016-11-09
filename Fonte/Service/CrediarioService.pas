@@ -13,6 +13,10 @@ type
   Apagar,ValorApagar,Pago,ValorPago,Total,ValorTotal: TLabel; Search: String);
   class procedure indexContaPagar(DataSet: TFDMemTable; Pagas,Apagar,
   Vencidas,TotalPagamentos,NLancamentos: TLabel; Search,Tipo: String; DtIni,DtFim: TDateTime);
+
+  class procedure indexContaReceber(DataSet: TFDMemTable; Recebidas,AReceber,
+  Vencidas,TotalRecebimentos,NLancamentos: TLabel; Search,Tipo: String; DtIni,DtFim: TDateTime);
+
   class function getById(IdCrediario: String): TFnCrediarioVO;
   class function save(Crediario: TFnCrediarioVO): Boolean;
   class function destroyer(IdCrediario: String): Boolean;
@@ -76,6 +80,7 @@ begin
     begin
       Dataset.Append;
       Dataset.FieldByName('ID').AsString:= Crediarioss.Items[I].Id;
+      Dataset.FieldByName('ID_COMPRA').AsString:= Crediarioss.Items[I].IdCompra;
       DataSet.FieldByName('VENCIMENTO').AsDateTime:= Crediarioss.Items[I].DataVencimento;
       PlanoConta:= TPlanoContaService.getById(Crediarioss.Items[I].IdPlanoConta);
       DataSet.FieldByName('LANCAMENTO').AsString:= PlanoConta.Nome;
@@ -86,9 +91,8 @@ begin
       FreeAndNil(Pessoa);
       DataSet.FieldByName('VALOR').AsCurrency:= Crediarioss.Items[I].Valor;
 
-      if Crediarioss.Items[I].DataVencimento <= now  then
+      if Crediarioss.Items[I].DataVencimento < date  then
         VVencidas:= VVencidas + Crediarioss.Items[I].Valor;
-
 
       if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
         VApagar:= VApagar + Crediarioss.Items[I].Valor
@@ -96,7 +100,7 @@ begin
       if Trim(Crediarioss.Items[I].Status) = 'PAGO' then
         VPagas:= VPagas + Crediarioss.Items[I].ValorPago;
 
-      VTotalPagamentos:= VTotalPagamentos + Crediarioss.Items[I].Valor;
+      VTotalPagamentos:= VTotalPagamentos + (Crediarioss.Items[I].Valor - Crediarioss.Items[I].ValorPago);
       TNLancamentos:= TNLancamentos + 1;
 
       if Crediarioss.Items[I].IdParcelaPai.IsEmpty then
@@ -106,7 +110,7 @@ begin
         begin
           if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
           begin
-            if Crediarioss.Items[I].DataVencimento <= now then
+            if Crediarioss.Items[I].DataVencimento < date then
               Status:= 3 //PARCELA A PAGAR PARCIAL VENCIDA
             else
               Status:= 4 //PARCELA A PAGAR PARCIAL
@@ -118,7 +122,7 @@ begin
         begin
           if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
           begin
-            if Crediarioss.Items[I].DataVencimento <= now then
+            if Crediarioss.Items[I].DataVencimento < date then
               Status:= 1 //PARCELA A PAGAR VENCIDA
             else
               Status:= 2 //PARCELA A PAGAR
@@ -133,7 +137,7 @@ begin
       begin
         if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
         begin
-          if Crediarioss.Items[I].DataVencimento <= now then
+          if Crediarioss.Items[I].DataVencimento < date then
             Status:= 3 //PARCELA A PAGAR PARCIAL VENCIDA
           else
             Status:= 4 //PARCELA A PAGAR PARCIAL
@@ -153,6 +157,117 @@ begin
   Apagar.Caption:= FloatToStrF(VApagar,ffNumber,12,2);
   Vencidas.Caption:= FloatToStrF(VVencidas,ffNumber,12,2);
   TotalPagamentos.Caption:= FloatToStrF(VTotalPagamentos,ffNumber,12,2);
+  NLancamentos.Caption:= FloatToStrF(TNLancamentos,ffGeneral,12,1);
+
+  Dataset.EnableControls;
+end;
+
+class procedure TCrediarioService.indexContaReceber(DataSet: TFDMemTable;
+  Recebidas, AReceber, Vencidas, TotalRecebimentos, NLancamentos: TLabel;
+  Search, Tipo: String; DtIni, DtFim: TDateTime);
+var
+  Crediarioss: TList<TFnCrediarioVO>;
+  ParcelaParcial: TList<TFnCrediarioVO>;
+  PlanoConta: TFnPlanoContaVO;
+  Pessoa: TPsPessoaVO;
+  I,Status: Integer;
+  VRecebidas,VAReceber,
+  VVencidas,VTotalRecebimentos,TNLancamentos: Currency;
+begin
+  Crediarioss:= nil;
+  Dataset.Open;
+  Dataset.DisableControls;
+  Dataset.EmptyDataSet;
+  if Tipo = '0' then
+    Crediarioss:= TCrediarioRepository.indexContaReceber(Search)
+  else
+    Crediarioss:= TCrediarioRepository.indexContaReceberEntreData(Search,DtIni,DtFim);
+
+  VRecebidas:= 0; VAReceber:= 0; VVencidas:= 0; VTotalRecebimentos:= 0; TNLancamentos:= 0;
+  if Assigned(Crediarioss) then
+  begin
+    for I:= 0 to Pred(Crediarioss.Count) do
+    begin
+      Dataset.Append;
+      Dataset.FieldByName('ID').AsString:= Crediarioss.Items[I].Id;
+      Dataset.FieldByName('ID_VENDA').AsString:= Crediarioss.Items[I].IdVenda;
+      DataSet.FieldByName('VENCIMENTO').AsDateTime:= Crediarioss.Items[I].DataVencimento;
+      PlanoConta:= TPlanoContaService.getById(Crediarioss.Items[I].IdPlanoConta);
+      DataSet.FieldByName('LANCAMENTO').AsString:= PlanoConta.Nome;
+      FreeAndNil(PlanoConta);
+      DataSet.FieldByName('DESCRICAO').AsString:= Crediarioss.Items[I].Descricao;
+      Pessoa:= TPessoaService.getById(Crediarioss.Items[I].IdPessoa);
+      DataSet.FieldByName('FORNECEDOR').AsString:= Pessoa.Nome;
+      FreeAndNil(Pessoa);
+      DataSet.FieldByName('VALOR').AsCurrency:= Crediarioss.Items[I].Valor;
+
+      if Crediarioss.Items[I].DataVencimento < date  then
+        VVencidas:= VVencidas + Crediarioss.Items[I].Valor;
+
+
+      if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
+        VAReceber:= VAReceber + Crediarioss.Items[I].Valor
+      else
+      if Trim(Crediarioss.Items[I].Status) = 'PAGO' then
+        VRecebidas:= VRecebidas + Crediarioss.Items[I].ValorPago;
+
+      VTotalRecebimentos:= VTotalRecebimentos + (Crediarioss.Items[I].Valor - Crediarioss.Items[I].ValorPago);
+      TNLancamentos:= TNLancamentos + 1;
+
+      if Crediarioss.Items[I].IdParcelaPai.IsEmpty then
+      begin
+        ParcelaParcial:= TCrediarioRepository.indexContaPagarParcelaFilho(Search);
+        if Assigned(ParcelaParcial) then
+        begin
+          if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
+          begin
+            if Crediarioss.Items[I].DataVencimento < date then
+              Status:= 3 //PARCELA A PAGAR PARCIAL VENCIDA
+            else
+              Status:= 4 //PARCELA A PAGAR PARCIAL
+          end
+          else
+            Status:= 5; // PARCELA PAGA PARCIAL
+        end
+        else
+        begin
+          if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
+          begin
+            if Crediarioss.Items[I].DataVencimento < date then
+              Status:= 1 //PARCELA A PAGAR VENCIDA
+            else
+              Status:= 2 //PARCELA A PAGAR
+          end
+          else
+            Status:= 0; // PARCELA PAGA
+        end;
+        FreeAndNil(ParcelaParcial);
+      end
+      else
+      if not Crediarioss.Items[I].IdParcelaPai.IsEmpty then
+      begin
+        if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
+        begin
+          if Crediarioss.Items[I].DataVencimento < date then
+            Status:= 3 //PARCELA A PAGAR PARCIAL VENCIDA
+          else
+            Status:= 4 //PARCELA A PAGAR PARCIAL
+        end
+        else
+          Status:= 5; // PARCELA PAGA PARCIAL
+      end;
+
+      DataSet.FieldByName('STATUS').AsInteger:= Status;
+      Dataset.Post;
+      Crediarioss.Items[I].Free;
+    end;
+    FreeAndNil(Crediarioss);
+    Dataset.First;
+  end;
+  Recebidas.Caption:= FloatToStrF(VRecebidas,ffNumber,12,2);
+  AReceber.Caption:= FloatToStrF(VAReceber,ffNumber,12,2);
+  Vencidas.Caption:= FloatToStrF(VVencidas,ffNumber,12,2);
+  TotalRecebimentos.Caption:= FloatToStrF(VTotalRecebimentos,ffNumber,12,2);
   NLancamentos.Caption:= FloatToStrF(TNLancamentos,ffGeneral,12,1);
 
   Dataset.EnableControls;
@@ -192,7 +307,7 @@ begin
       DataSet.FieldByName('PARCELA').AsString:= Crediarioss.Items[I].Parcela;
       DataSet.FieldByName('VALOR').AsCurrency:= Crediarioss.Items[I].Valor;
       DataSet.FieldByName('RECEBIDO').AsCurrency:= Crediarioss.Items[I].ValorPago;
-      if Crediarioss.Items[I].DataVencimento <= now  then
+      if Crediarioss.Items[I].DataVencimento < date  then
       begin
         VEmAtraso:= VEmAtraso + 1;
         VValorAtraso:= VValorAtraso + Crediarioss.Items[I].Valor;
@@ -220,7 +335,7 @@ begin
         begin
           if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
           begin
-            if Crediarioss.Items[I].DataVencimento <= now then
+            if Crediarioss.Items[I].DataVencimento < date then
               Status:= 3 //PARCELA A PAGAR PARCIAL VENCIDA
             else
               Status:= 4 //PARCELA A PAGAR PARCIAL
@@ -232,7 +347,7 @@ begin
         begin
           if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
           begin
-            if Crediarioss.Items[I].DataVencimento <= now then
+            if Crediarioss.Items[I].DataVencimento < date then
               Status:= 1 //PARCELA A PAGAR VENCIDA
             else
               Status:= 2 //PARCELA A PAGAR
@@ -247,7 +362,7 @@ begin
       begin
         if Trim(Crediarioss.Items[I].Status) = 'A PAGAR' then
         begin
-          if Crediarioss.Items[I].DataVencimento <= now then
+          if Crediarioss.Items[I].DataVencimento < date then
             Status:= 3 //PARCELA A PAGAR PARCIAL VENCIDA
           else
             Status:= 4 //PARCELA A PAGAR PARCIAL

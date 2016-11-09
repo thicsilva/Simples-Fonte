@@ -12,7 +12,10 @@ type
   class function indexContaPagarEntreData(Search: String; DtIni,DtFim: TDateTime): TList<TFnCrediarioVO>;
   class function indexParcelaPagar(Search: String): TList<TFnCrediarioVO>;
   class function indexContaPagarParcelaFilho(Search: String): TList<TFnCrediarioVO>;
+
   class function indexContaReceber(Search: String): TList<TFnCrediarioVO>;
+  class function indexContaReceberEntreData(Search: String; DtIni,DtFim: TDateTime): TList<TFnCrediarioVO>;
+
   class function indexVenda(Search: String): TList<TFnCrediarioVO>;
   class function indexVendaPaga(Search: String): TList<TFnCrediarioVO>;
   class function store(Crediario: TFnCrediarioVO): Boolean;
@@ -70,8 +73,30 @@ class function TCrediarioRepository.indexContaReceber(Search: String): TList<TFn
 var
   Filtro: String;
 begin
-  Filtro:= ' OBS LIKE ' + QuotedStr(Search+'%') + ' AND TIPO_CADASTRO = ''CONTA A RECEBER'' ORDER BY DATA_VENCIMENTO';
+  if Search <> '' then
+    Filtro:= ' ID LIKE ' + QuotedStr(Search+'%') + ' AND TIPO_CADASTRO = ''CONTA A RECEBER'' ORDER BY DATA_VENCIMENTO'
+  else
+    Filtro:= ' ID IS NOT NULL  AND TIPO_CADASTRO = ''CONTA A RECEBER'' ORDER BY DATA_VENCIMENTO';
+
   Result:= Consultar<TFnCrediarioVO>(False,Filtro);
+end;
+
+class function TCrediarioRepository.indexContaReceberEntreData(Search: String;
+  DtIni, DtFim: TDateTime): TList<TFnCrediarioVO>;
+var
+  Filtro: String;
+begin
+  if Search <> '' then
+  begin
+    Filtro:= ' ID LIKE ' + QuotedStr(Search+'%') + ' AND TIPO_CADASTRO = ''CONTA A RECEBER'' AND '+
+    DatesToSQL(DtIni,DtFim,'DATA_VENCIMENTO',False);
+    Result:= Consultar<TFnCrediarioVO>(False,Filtro);
+  end
+  else
+  begin
+    Filtro:= ' ID IS NOT NULL  AND TIPO_CADASTRO = ''CONTA A RECEBER'' AND  ' + DatesToSQL(DtIni,DtFim,'DATA_VENCIMENTO',False);
+    Result:= Consultar<TFnCrediarioVO>(False,Filtro);
+  end;
 end;
 
 class function TCrediarioRepository.indexParcelaPagar(
