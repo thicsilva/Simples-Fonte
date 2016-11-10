@@ -16,6 +16,8 @@ type
   class function indexContaReceber(Search: String): TList<TFnCrediarioVO>;
   class function indexContaReceberEntreData(Search: String; DtIni,DtFim: TDateTime): TList<TFnCrediarioVO>;
 
+  class function indexCompraPaga(Search: String): TList<TFnCrediarioVO>;
+
   class function indexVenda(Search: String): TList<TFnCrediarioVO>;
   class function indexVendaPaga(Search: String): TList<TFnCrediarioVO>;
   class function store(Crediario: TFnCrediarioVO): Boolean;
@@ -28,6 +30,15 @@ type
 implementation
 
 { TCrediarioRepository }
+
+class function TCrediarioRepository.indexCompraPaga(
+  Search: String): TList<TFnCrediarioVO>;
+var
+  Filtro: String;
+begin
+  Filtro:= ' ID_COMPRA = ' + QuotedStr(Search) + ' AND STATUS = ''PAGO''';
+  Result:= Consultar<TFnCrediarioVO>(False,Filtro);
+end;
 
 class function TCrediarioRepository.indexContaPagar(
   Search: String): TList<TFnCrediarioVO>;

@@ -3147,8 +3147,10 @@ inherited FVendaStore: TFVendaStore
         Font.Height = -13
         Font.Name = 'Courier New'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 0
+        Text = '1 DIA DO MES'
         Items.Strings = (
           '1 DIA DO MES'
           '2 DIA DO MES'

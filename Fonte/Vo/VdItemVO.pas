@@ -52,6 +52,7 @@ type
     FQUANTIDADE: Extended;
     FCUSTO: Extended;
     FSUBTOTAL: Extended;
+    FSTATUS: String;
 
   public 
     [TId('ID')]
@@ -73,6 +74,8 @@ type
     [TColumn('SUBTOTAL','Subtotal',128,[ldGrid, ldLookup, ldCombobox], False)]
     [TFormatter(ftFloatComSeparador, taRightJustify)]
     property Subtotal: Extended  read FSUBTOTAL write FSUBTOTAL;
+    [TColumn('STATUS','Status',450,[ldGrid, ldLookup, ldCombobox], False)]
+    property Status: String  read FSTATUS write FSTATUS;
 
   end;
 

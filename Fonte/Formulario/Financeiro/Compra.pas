@@ -9,7 +9,8 @@ uses
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, System.Actions, Vcl.ActnList,
   System.ImageList, Vcl.ImgList, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.WinXCtrls, Vcl.ExtCtrls,
-  Vcl.Buttons, Vcl.Imaging.pngimage, CompraService;
+  Vcl.Buttons, Vcl.Imaging.pngimage, CompraService,System.Generics.Collections,
+  FnCrediarioVO, CrediarioRepository;
 
 type
   TFCompra = class(TFModelo)
@@ -46,13 +47,22 @@ implementation
 uses CompraStore, Mensagem, Menu;
 
 procedure TFCompra.ActionAlrerarExecute(Sender: TObject);
+var
+  PossueParcelaPaga: TList<TFnCrediarioVO>;
 begin
   if  not fdmt_Modelo.IsEmpty then
   begin
-    varBaseIdCompra:= fdmt_ModeloID.AsString;
-    OpenForm(FCompraStore,TFCompraStore);
-    fdmt_Modelo.Open;
-    TCompraService.index(fdmt_Modelo,'');
+    PossueParcelaPaga:= TCrediarioRepository.indexCompraPaga(fdmt_ModeloID.AsString);
+    if not Assigned(PossueParcelaPaga) then
+    begin
+      varBaseIdCompra:= fdmt_ModeloID.AsString;
+      OpenForm(FCompraStore,TFCompraStore);
+      fdmt_Modelo.Open;
+      TCompraService.index(fdmt_Modelo,'');
+    end
+    else
+      Mensagem('Está compra possue parcelas já paga, logo a mesma não pode ser alterada.',0,1);
+    FreeAndNil(PossueParcelaPaga);
   end;
 end;
 
@@ -65,6 +75,8 @@ begin
 end;
 
 procedure TFCompra.ActionExcluirExecute(Sender: TObject);
+var
+  PossueParcelaPaga: TList<TFnCrediarioVO>;
 begin
   if not fdmt_Modelo.IsEmpty then
   begin
@@ -83,8 +95,15 @@ begin
         begin
           if fdmt_ModeloMARK.AsInteger = 1 then
           begin
-            if TCompraService.destroyer(fdmt_ModeloID.AsString) then
-              fdmt_Modelo.Delete;
+            PossueParcelaPaga:= TCrediarioRepository.indexCompraPaga(fdmt_ModeloID.AsString);
+            if not Assigned(PossueParcelaPaga) then
+            begin
+              if TCompraService.destroyer(fdmt_ModeloID.AsString) then
+                fdmt_Modelo.Delete;
+            end
+            else
+              Mensagem('Compra '+ fdmt_ModeloCOMPRA.AsString +' possue parcelas já paga, logo a mesma não pode ser alterada.',0,1);
+            FreeAndNil(PossueParcelaPaga);
           end;
 
           fdmt_Modelo.Next;

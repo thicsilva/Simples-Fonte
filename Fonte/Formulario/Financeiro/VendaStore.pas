@@ -269,6 +269,7 @@ begin
             ObjItemList.Items[I].Quantidade:= fdmt_ItemQUANTIDADE.AsCurrency;
             ObjItemList.Items[I].Custo:= fdmt_ItemCUSTO.AsCurrency;
             ObjItemList.Items[I].Subtotal:= fdmt_ItemSUBTOTAL.AsCurrency;
+            ObjItemList.Items[I].Status:= cbxStatusNegosiacao.Text;
             TVendaItemService.save(ObjItemList.Items[I]);
           end
           else
@@ -287,6 +288,7 @@ begin
           Item.Quantidade:= fdmt_ItemQUANTIDADE.AsCurrency;
           item.Custo:= fdmt_ItemCUSTO.AsCurrency;
           item.Subtotal:= fdmt_ItemSUBTOTAL.AsCurrency;
+          item.Status:= cbxStatusNegosiacao.Text;
           TVendaItemService.save(Item);
           FreeAndNil(Item);
           fdmt_Item.Next;
@@ -397,6 +399,8 @@ begin
     fdmt_Parcelas.EmptyDataSet;
 
     Parcelas:= StrToInt(Copy(cbxVendaCondicaoParcela.Text,0,Pos('X',cbxVendaCondicaoParcela.Text) -1));
+    Sobras:= (ConvertCurrency(lblTotalLiquido.Caption) -
+    ConvertCurrency(FloatToStrF((ConvertCurrency(lblTotalLiquido.Caption) / Parcelas),ffNumber,12,2)) * Parcelas);
 
     for I:= 0 to Pred(Parcelas) do
     begin
@@ -405,11 +409,7 @@ begin
       fdmt_Parcelas.FieldByName('VENCIMENTO').AsDateTime:= IncMonth(now,I);
       fdmt_Parcelas.FieldByName('OBS').AsString:= '';
       if I+1 = Parcelas then
-      begin
-        Sobras:= (ConvertCurrency(lblTotalLiquido.Caption) -
-        ConvertCurrency(FloatToStrF((ConvertCurrency(lblTotalLiquido.Caption) / Parcelas),ffNumber,12,2)) * Parcelas);
-        fdmt_Parcelas.FieldByName('VALOR').AsCurrency:= Sobras + (ConvertCurrency(lblTotalLiquido.Caption) / Parcelas);
-      end
+        fdmt_Parcelas.FieldByName('VALOR').AsCurrency:= Sobras + (ConvertCurrency(lblTotalLiquido.Caption) / Parcelas)
       else
         fdmt_Parcelas.FieldByName('VALOR').AsCurrency:= ConvertCurrency(lblTotalLiquido.Caption) / Parcelas;
       fdmt_Parcelas.Post;
@@ -517,6 +517,21 @@ begin
   ObjVenda.Frete:= ConvertCurrency(edtValorFrete.Text);
   ObjVenda.ValorTotal:= ConvertCurrency(lblValorTotal.Caption);
   ObjVenda.TotalLiquido:= ConvertCurrency(lblTotalLiquido.Caption);
+
+  if cbxVendaCondicaoParcela.ItemIndex < 2 then
+  begin
+    fdmt_Parcelas.Open;
+    fdmt_Parcelas.DisableControls;
+    fdmt_Parcelas.EmptyDataSet;
+
+    fdmt_Parcelas.Insert;
+    fdmt_ParcelasPARCELA.AsString:= '1/1';
+    fdmt_ParcelasVENCIMENTO.AsDateTime:= edtDataVencimento.Date;
+    fdmt_ParcelasOBS.AsString:= edtObsParcelaAvista.Text;
+    fdmt_ParcelasVALOR.AsCurrency:= ConvertCurrency(lblTotalLiquido.Caption);
+    fdmt_Parcelas.Post;
+    fdmt_Parcelas.EnableControls;
+  end;
 end;
 
 procedure TFVendaStore.edtTotalDescontoChange(Sender: TObject);

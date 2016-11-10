@@ -23,7 +23,11 @@ class function TCompraRepository.index(Search: String): TList<TCpCompraVO>;
 var
   Filtro: String;
 begin
-  Filtro:= ' OBS LIKE ' + QuotedStr(Search+'%');
+  if Search <> '' then
+    Filtro:= ' OBS LIKE ' + QuotedStr(Search+'%') + ' ORDER BY DATA_VENCIMENTO'
+  else
+    Filtro:= ' ID IS NOT NULL  ORDER BY DATA_VENCIMENTO';
+
   Result:= Consultar<TCpCompraVO>(False,Filtro);
 end;
 
